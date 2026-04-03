@@ -48,8 +48,6 @@ with col1:
  
 with col2:
     st.subheader("Outfit Category Percentage Breakdown")
-with col2:
-    st.subheader("Outfit Category Percentage Breakdown")
 
     # Sample outfit category data and replace with session state data if tracked
     outfit_data = pd.DataFrame({
