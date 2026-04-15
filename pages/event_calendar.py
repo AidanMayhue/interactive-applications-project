@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_calendar import calendar
 import time
 import datetime
+from time import sleep 
 st.set_page_config(page_title="Streamlit Calendar", layout="wide")
 
 if "events" not in st.session_state:
@@ -28,7 +29,7 @@ if page=="Calendar":
             if 'date' not in st.session_state:
                 st.session_state.date=datetime.date.today()
             if 'event_title' not in st.session_state:
-                st.session_state.event_title=""
+                st.session_state.event_title="new event"
             if 'time' not in st.session_state:
                 st.session_state.time=None
             if "all_day" not in st.session_state:
@@ -37,7 +38,8 @@ if page=="Calendar":
 
             with st.form("event_form", clear_on_submit=False):
                 title = st.text_input("Event Title", key="event_title")
-                date = st.date_input("Event Date", key="date")
+                start_date = st.date_input("Start Date", key="date")
+                end_date = st.date_input("End Date", key="end_date")
                 if not all_day:
                     event_time=st.time_input("Event Time", key="time")
                 else:
@@ -45,25 +47,28 @@ if page=="Calendar":
 
                 submit = st.form_submit_button("Add Event")
             if submit:
-                if title.strip():
-                    if all_day:
-                        start_time = date.strftime("%Y-%m-%d")
-                    else:
-                        start_time = f"{date}T{event_time}"
-                        start_display=f"{date} at {event_time}"
-                    new_event = {
-                        "title": title,
-                        "start": start_time,
-                        "display": start_display if not all_day else date.strftime("%Y-%m-%d")
-                        }
-                    if new_event not in st.session_state.events:
-                        st.session_state.events.append(new_event)
-                        st.success(f"Added {title}!")
-                        st.rerun()  
-                    else:
-                        st.warning("This event already exists in your calendar.")
+                if end_date < start_date:
+                    st.error("End date cannot be before the start date.")
+            elif title.strip():
+                if all_day:
+                    start_time = start_date.strftime("%Y-%m-%d")
                 else:
-                    st.error("Title required.")
+                    start_time = f"{start_date}T{event_time}"
+                    start_display = f"{start_date} at {event_time}"
+                new_event = {
+                    "title": title,
+                    "start": start_time,
+                    "end": end_date.strftime("%Y-%m-%d"),
+                    "display": start_display if not all_day else start_date.strftime("%Y-%m-%d")
+                }
+                if new_event not in st.session_state.events:
+                    st.session_state.events.append(new_event)
+                    st.success(f"Added {title}!")
+                    st.rerun()
+                else:
+                    st.warning("This event already exists in your calendar, pick different values")
+            else:
+                st.error("Title required.")
         with tab2:
             if st.session_state.events:
                 with st.form("delete_form"):
@@ -73,7 +78,7 @@ if page=="Calendar":
                     if delete_submit:
                         if event_to_delete:
                             st.session_state.events = [e for e in st.session_state.events if f"{e['title']} ({e['display']})" not in event_to_delete]
-                            st.success(f"Removed {', '.join(event_to_delete)}!")
+                            st.toast(f"Removed {', '.join(event_to_delete)}! 🗑️")
                             st.rerun()
                         else:
                             st.warning("Please select at least one event to delete.")
