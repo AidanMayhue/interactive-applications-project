@@ -1,3 +1,16 @@
+API 1: Open-Meteo Geocoding API
+URL: https://geocoding-api.open-meteo.com/v1/search
+Authentication Method: None because Open-Meteo is a free, open-source API.
+Rate Limits: The app uses @st.cache_data with a TTL value of 86400 seconds (1 day) since the location of a city is unlikely to change in a short amount of time.
+Why the API is valuable: Busy college students live in many different cities and may not know their exact coordinates, so this API allows them to simply type their city/state and have it automatically be converted to the location for accurate weather data.
+
+API 2: Open-Meteo Weather API
+URL: https://api.open-meteo.com/v1/forecast
+Authentication Method: None because Open-Meteo is a free, open-source API.
+Rate Limits: The app uses @st.cache_data with a TTL value of 3600 seconds (1 hour) to avoid unnecessary requests and update weather every hour.
+Why the API is valuable: Busy college students don’t have the time to check the weather and also plan outfits manually. This weather API automatically provides a forecast that produces outfit recommendations without the user having to do anything.
+
+
 # Interactivity Self Review
 ## Self-Criteria Evaluation
 
