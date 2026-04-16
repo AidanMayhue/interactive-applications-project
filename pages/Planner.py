@@ -6,6 +6,13 @@ st.title("Interactive Outfit Planner")
 st.divider()
 st.header('Choose the day of the week')
 
+def reset_outfits():
+    for day in days.keys():
+        st.session_state[f"{day}_use_suggested"] = True
+        st.session_state[f"{day}_custom_outfit"] = ""
+    st.toast("Filters cleared!")
+    sleep(3)
+
 days = {
     "Monday":    {"weather": "Sunny, 25°C",        "occasion": "Casual workday",     "outfit": "Light blouse, tailored pants, and loafers."},
     "Tuesday":   {"weather": "Cloudy, 18°C",        "occasion": "Business meeting",   "outfit": "Blazer, pencil skirt, and heels."},
@@ -16,13 +23,7 @@ days = {
     "Sunday":    {"weather": "Clear, 24°C",         "occasion": "Family outing",      "outfit": "Comfortable t-shirt, jeans, and sneakers."},
 }
 
-if st.button("🔄 Reset All Outfits"):
-    for day in days.keys():
-        st.session_state[f"{day}_use_suggested"] = True
-        st.session_state[f"{day}_custom_outfit"] = ""
-    st.toast("Filters cleared!")
-    sleep(5)
-    st.rerun()
+st.button("🔄 Reset All Outfits", on_click=reset_outfits)
 
 
 for day, info in days.items():
@@ -59,4 +60,3 @@ for tab, (day, info) in zip(tabs, days.items()):
                 st.success(f"Custom outfit set: {custom}")
         else:
             st.info(f"Outfit selected: {info['outfit']}")
-
