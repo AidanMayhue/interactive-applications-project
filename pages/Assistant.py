@@ -287,7 +287,7 @@ if user_input is not None and not st.session_state.is_processing:
         system_prompt = build_system_prompt(weather_summary)
 
         model = genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
+            model_name="gemini-2.5-flash",
             system_instruction=system_prompt,
         )
 
