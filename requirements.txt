@@ -1,0 +1,6 @@
+streamlit
+plotly
+google-generativeai
+streamlit-calendar
+requests
+pandas

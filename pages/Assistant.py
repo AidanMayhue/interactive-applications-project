@@ -42,18 +42,35 @@ def contains_injection(text: str) -> bool:
 
 # ─── Build Weather Context from Session State ──────────────────────────────────
 def build_weather_summary() -> str:
-    """
-    Pull the 7-day forecast and outfit log from session state and return a
-    compact JSON string to inject into the system prompt.
-    Only a summary is sent — never the full raw API payload.
-    """
     weather_data = st.session_state.get("weather_data")
     city = st.session_state.get("city_with_state", "an unknown location")
     outfit_log = st.session_state.get("outfit_log", {})
     today_outfit = st.session_state.get("today_outfit", None)
 
+    # Pull excluded items from Outfit Builder
+    excluded = {
+        "shoes": st.session_state.get("selected_shoes", []),
+        "shirts": st.session_state.get("selected_shirts", []),
+        "pants": st.session_state.get("selected_pants", []),
+    }
+
+    # Pull upcoming calendar events from Event Calendar
+    raw_events = st.session_state.get("events", [])
+    today_str = datetime.today().strftime("%Y-%m-%d")
+    upcoming_events = [
+        {"title": e["title"], "date": e["start"].split("T")[0]}
+        for e in raw_events
+        if e.get("start", "").split("T")[0] >= today_str
+    ]
+
     if not weather_data:
-        return json.dumps({"city": city, "forecast": [], "outfit_log": outfit_log})
+        return json.dumps({
+            "city": city,
+            "forecast": [],
+            "outfit_log": outfit_log,
+            "excluded_items": excluded,
+            "upcoming_events": upcoming_events,
+        })
 
     daily = weather_data.get("daily", {})
     dates = daily.get("time", [])
@@ -64,8 +81,7 @@ def build_weather_summary() -> str:
     weather_codes = daily.get("weathercode", [])
 
     WEATHER_DESCRIPTIONS = {
-        0: "Clear sky",
-        1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
+        0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
         45: "Foggy", 48: "Depositing rime fog",
         51: "Light drizzle", 53: "Moderate drizzle", 55: "Dense drizzle",
         61: "Slight rain", 63: "Moderate rain", 65: "Heavy rain",
@@ -75,11 +91,12 @@ def build_weather_summary() -> str:
         99: "Thunderstorm with heavy hail",
     }
 
-    today_str = datetime.today().strftime("%Y-%m-%d")
     future = [(d, i) for i, d in enumerate(dates) if d >= today_str][:7]
 
     forecast = []
     for d, i in future:
+        # Attach any events on this day directly to the forecast entry
+        day_events = [e["title"] for e in upcoming_events if e["date"] == d]
         forecast.append({
             "date": d,
             "day": datetime.strptime(d, "%Y-%m-%d").strftime("%A"),
@@ -88,16 +105,18 @@ def build_weather_summary() -> str:
             "wind_mph": wind_speeds[i] if i < len(wind_speeds) else None,
             "precip_mm": precips[i] if i < len(precips) else None,
             "condition": WEATHER_DESCRIPTIONS.get(weather_codes[i], "Mixed") if i < len(weather_codes) else "Unknown",
+            "events": day_events,
         })
 
-    summary = {
+    return json.dumps({
         "city": city,
         "today": today_str,
         "forecast": forecast,
-        "outfit_log": outfit_log,           # e.g. {"2025-04-10": "Light", ...}
+        "outfit_log": outfit_log,
         "todays_outfit": today_outfit,
-    }
-    return json.dumps(summary, indent=2)
+        "excluded_items": excluded,   # ← new
+        "upcoming_events": upcoming_events,  # ← new
+    }, indent=2)
 
 
 # ─── System Prompt ─────────────────────────────────────────────────────────────
