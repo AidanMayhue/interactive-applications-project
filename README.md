@@ -8,9 +8,11 @@ A 3rd technique is structured output, found in the section"For outfit recommenda
 **👗 Outfit:** [specific clothing items]
 **🌤️ Reason:** [1–2 sentences tying the outfit to the weather data]". Establishing structure ensures the UI maintains consistency across all relevant responses. Without this, the model could write bullet points, paragraphs, or just a couple sentences with different information across different responses. This structure makes the app feel more polished.
 
-An example user input for someone with an interview on Thursday would be "What should I wear Thursday?" The resulting reponse from the LLM is shows in the image below:
+An example user input for someone with an interview on Thursday would be "What should I wear Thursday?" The resulting response from the LLM is shown in the image below:
 <img width="1894" height="1326" alt="image" src="https://github.com/user-attachments/assets/816c1dfd-3c2a-4652-a5bf-191ae07aa2aa" />
 
 It provides an encouraging response while also following the structure of outfit, reasoning, and tip.
 
-A potential failure or limitation is that 
+A limitation observed is that the model prioritizes weather over a special occasion scheduled for the same day. For example, when prompted "What should I wear today?" when the weather is rainy but also with a wedding, it suggested dark-wash jeans and sneakers, which are not appropriate for the wedding occasion:
+<img width="1439" height="522" alt="image" src="https://github.com/user-attachments/assets/321cf8d1-19b9-4a6e-ab9a-c6e15e8eff3c" />
+
