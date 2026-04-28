@@ -9,5 +9,4 @@ A 3rd technique is structured output, found in "For outfit recommendations, alwa
 **🌤️ Reason:** [1–2 sentences tying the outfit to the weather data]". Establishing structure ensures the UI maintains consistency across all relevant responses. Without this, the model could write bullet points, paragraphs, or just a couple sentences with different information across different responses. This structure makes the app feel more polished.
 
 An example user input for someone with an interview on Thursday would be "What should I wear Thursday?" The resulting reponse from the LLM is shows in the image below
-![LLM response](<img width="1894" height="1326" alt="image" src="https://github.com/user-attachments/assets/2d1adca8-91e2-448c-af91-34442fff093a" />
-)
+<img width="1894" height="1326" alt="image" src="https://github.com/user-attachments/assets/816c1dfd-3c2a-4652-a5bf-191ae07aa2aa" />
