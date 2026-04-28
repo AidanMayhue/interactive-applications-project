@@ -13,6 +13,5 @@ An example user input for someone with an interview on Thursday would be "What s
 
 It provides an encouraging response while also following the structure of outfit, reasoning, and tip.
 
-A limitation observed is that the model prioritizes weather over a special occasion scheduled for the same day. For example, when prompted "What should I wear today?" when the weather is rainy but also with a wedding, it suggested dark-wash jeans and sneakers, which are not appropriate for the wedding occasion:
+A limitation observed is that the model had a slow response when working with conflicting information between an event and weather, and it prioritizes weather over a special occasion scheduled for the same day. For example, when prompted "What should I wear today?" when the weather is rainy but also with a wedding, it suggested dark-wash jeans and sneakers, which are not appropriate for the wedding occasion:
 <img width="1439" height="522" alt="image" src="https://github.com/user-attachments/assets/321cf8d1-19b9-4a6e-ab9a-c6e15e8eff3c" />
-
