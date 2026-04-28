@@ -62,7 +62,7 @@ if st.session_state.step == 1:
 elif st.session_state.step == 2:
     st.subheader("👕 Step 2: Select Your Shirts to be excluded")
     shirt_options = sorted([
-        "T-Shirt", "Button-Up", "Polo", "Hoodie", "Quarter-Zip Jacket", "Full-Zip Jacket"
+        "T-Shirt", "Button-Up", "Polo", "Hoodie", "Quarter-Zip Jacket", "Full-Zip Jacket",
         "Tank Top", "Blouse", "Flannel", "Turtleneck","Crop-Top"
     ])
 
